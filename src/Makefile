@@ -1,5 +1,6 @@
-fc=gfortran
-libdir=../lib
+fc=gfortran -O3
+libdir=/opt/OpenBLAS/lib/
+libs=-lopenblas
 
 obj_fmmsynt3d = fmm_synt3d_v.o strct.o fmarch.o
 obj_prevel3d = prevel3d.o strct.o
@@ -8,7 +9,6 @@ obj_migraloc = migraloc.o strct.o
 obj_fmmfwregul2tprl = fmm_fw_regul2tprl.o strct.o fmarch.o
 obj_invctrlds = invctrlds.o strct.o
 obj_dloc2locmulti = dloc2loc_multi.o strct.o
-
 
 all: strct.o fmarch.o solver.o fmm_synt3d_v prevel3d genGSnoise\
 	 migraloc fmm_fw_regul2tprl fd2csm_row fdsep_qr fdsep_qr_wei\
@@ -23,7 +23,7 @@ fmm_synt3d_v.o : fmm_synt3d_v.f90
 prevel3d : $(obj_prevel3d)
 	$(fc) -o prevel3d $(obj_prevel3d)
 prevel3d.o : prevel3d.f90
-	$(fc) -c prevel3d.f90
+	$(fc) -O0 -c prevel3d.f90
 genGSnoise : $(obj_genGSnoise)
 	$(fc) -o genGSnoise $(obj_genGSnoise)
 genGSnoise.o : genGSnoise.f90
@@ -53,23 +53,23 @@ calmdres2 : calmdres2.o
 calmdres2.o : calmdres2.f90
 	$(fc) -c calmdres2.f90
 invsvddt_damp : invsvddt_damp.f90
-	$(fc) -mcmodel=medium -L$(libdir) -o invsvddt_damp invsvddt_damp.f90 -llapack -lrefblas
+	$(fc) -mcmodel=medium -L$(libdir) -o invsvddt_damp invsvddt_damp.f90 $(libs)
 invsvddt_damp_ps : invsvddt_damp_ps.f90
-	$(fc) -mcmodel=medium -L$(libdir) -o invsvddt_damp_ps invsvddt_damp_ps.f90 -llapack -lrefblas
+	$(fc) -mcmodel=medium -L$(libdir) -o invsvddt_damp_ps invsvddt_damp_ps.f90 $(libs)
 invctrlds : $(obj_invctrlds)
 	$(fc) -o invctrlds $(obj_invctrlds)
 invctrlds.o : invctrlds.f90
 	$(fc) -c invctrlds.f90
 invloc_svd_wei : invloc_svd_wei.f90 strct.o
-	$(fc) -mcmodel=medium -L$(libdir) -o invloc_svd_wei invloc_svd_wei.f90 strct.o -llapack -lrefblas
+	$(fc) -mcmodel=medium -L$(libdir) -o invloc_svd_wei invloc_svd_wei.f90 strct.o $(libs)
 dloc2loc_multi : $(obj_dloc2locmulti)
 	$(fc) -o dloc2loc_multi $(obj_dloc2locmulti)
 dloc2loc_multi.o : dloc2loc_multi.f90
 	$(fc) -c dloc2loc_multi.f90
 mdresolmat : mdresolmat.f90
-	$(fc) -mcmodel=medium -L$(libdir) -o mdresolmat mdresolmat.f90 -llapack -lrefblas
+	$(fc) -mcmodel=medium -L$(libdir) -o mdresolmat mdresolmat.f90 $(libs)
 mdresolmat_ps : mdresolmat_ps.f90
-	$(fc) -mcmodel=medium -L$(libdir) -o mdresolmat_ps mdresolmat_ps.f90 -llapack -lrefblas
+	$(fc) -mcmodel=medium -L$(libdir) -o mdresolmat_ps mdresolmat_ps.f90 $(libs)
 comb_ps : comb_ps.f90
 	$(fc) -o comb_ps comb_ps.f90
 initinpv : initinpv.f90 strct.o
@@ -80,3 +80,7 @@ fmarch.o : fmarch.f90
 	$(fc) -c fmarch.f90
 solver.o : solver.f90
 	$(fc) -c solver.f90
+
+clean:
+	-rm *.mod
+	file * | grep ELF | cut -d':' -f1 | xargs -r rm
