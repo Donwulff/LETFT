@@ -8,9 +8,9 @@ inpfdir=input_file
 
 # Parameters of input file
 ######################################################
-initvel_file_p=vel_init_p.txt
+initvel_file_p=init_vel_p.txt
 data_file_p=p_data.txt
-initvel_file_s=vel_init_s.txt
+initvel_file_s=init_vel_s.txt
 data_file_s=s_data.txt
 #######################################################
 
