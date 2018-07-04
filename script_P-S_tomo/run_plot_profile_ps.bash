@@ -2,7 +2,7 @@
 
 # Parameters of working dir
 #######################################################
-wkdir=work_p
+wkdir=work_ps
 inpfdir=outf
 inpfdir_1dv=input_file
 plotdir=plot
@@ -62,8 +62,10 @@ then
 fi
 
 # Copy files
-cp ./$wkdir/$inpfdir/$inpf1 ./$wkdir/$plotdir/
-cp ./$wkdir/$inpfdir/$modresf ./$wkdir/$plotdir/
+cp ./$wkdir/$inpfdir/$inpf_p ./$wkdir/$plotdir/
+cp ./$wkdir/$inpfdir/$inpf_s ./$wkdir/$plotdir/
+cp ./$wkdir/$inpfdir/$modresf_p ./$wkdir/$plotdir/
+cp ./$wkdir/$inpfdir/$modresf_s ./$wkdir/$plotdir/
 cp ./$inpfdir_1dv/$topo_file ./$wkdir/$plotdir/
 
 cp ./src_plot/cutvdiff_line2_xyz ./$wkdir/$plotdir/
@@ -105,6 +107,8 @@ mv elev_poly.txt elev_poly1.txt
 bash plot_v_xyz_line.bash $thrshd
 mv veltp_line.ps vel_p_line.ps
 mv veltp_line.eps vel_p_line.eps
+mv veltp_line.png vel_p_line.png
+mv veltp_line_transparent.png vel_p_line_transparent.png
 
 # cut slice of truevel
 echo "slice_veltp_1.txt" > cutvdiff_line2_xyz.inp
@@ -129,8 +133,10 @@ mv elev_poly.txt elev_poly1.txt
 bash plot_v_xyz_line.bash $thrshd
 mv veltp_line.ps vel_s_line.ps
 mv veltp_line.eps vel_s_line.eps
+mv veltp_line.png vel_s_line.png
+mv veltp_line_transparent.png vel_s_line_transparent.png
 
-cp *.ps *.eps ../$inpfdir
+cp *.ps *.eps *.png ../$inpfdir
 
 # Exit dir
 cd ../../
