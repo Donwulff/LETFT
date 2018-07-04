@@ -62,4 +62,7 @@ awk '{print $1,-4.079+$2}' $ndprj1 | gmt psxy -J -R -S+0.15 -Gwhite -W1.2p,white
 gmt psscale -D-3.5c/-1.2c/10c/0.3ch -O -C$outf.cpt -B1:Velocity\ \(km\/s\): >> $outf.ps
 
 
-gmt ps2raster -A -Te $outf.ps
+gmt psconvert -A -Te $outf.ps
+gmt psconvert -A -Tg $outf.ps
+echo gmt psconvert -A -TG -F${outf}_transparent.png $outf.ps
+gmt psconvert -A -TG -F${outf}_transparent.png $outf.ps
